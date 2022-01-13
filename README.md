@@ -1,34 +1,70 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Prerendering
 
-## Getting Started
+### What?
 
-First, run the development server:
+- Pre-rendering refers to the process of generating HTML with the necessary data for a page in our application (page source code)
+- By default, NextJS pre-renders every page in the application
+- NextJS generates HTML for each page in advance instead of having it all done by client-side JavaScript
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+### Why?
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Pre-rendering improves performance
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- In a react app, you need to wait for the JS to be executed
+- Perhaps fetch data from an external API and then render the UI
+- There is a wait time for the user
+- With a pre-rendered page, the HTML is already generated and loads faster
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+2. Pre-rendering helps with SEO
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- If you're building a blog or e-commerce site, you want search engines to index your content
+- If search engine hits a pre-rendered page, all the content is present in the source code which will help search engines index that page and contribute to better search rankings
 
-## Learn More
+### How?
 
-To learn more about Next.js, take a look at the following resources:
+- NextJS supports two forms of pre-rendering
+  1. Static Generation
+  2. Server-side Rendering
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Static Generation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### What?
 
-## Deploy on Vercel
+- A method of pre-rendering where the HTML pages are generated at build time
+- The HTML with all the data that makes up the content of the web page are generated in advance when you build your application
+- Recommended method to pre-render pages whenever possible
+- Page can be built once, cached by a CDN and served to the client almost instantly
+  Ex. Blog pages, documentation and marketing pages
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## getStaticProps()
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1.
+
+- Runs only on the server-side
+- The function will never run client-side
+- The code you write inside getStaticProps won't even be included in the JS bundle that is sent to the browser
+
+2.
+
+- You can write server-side code directly in getStaticProps
+- Accessing the file system using the fs module or querying a database can be done inside getStaticProps
+- You don't have to worry about about including API keys in getStaticProps as that won't make it to the browser
+
+3.
+
+- getStaticProps can only be run from a page and not a normal component file
+- It is used for pre-rendering only and not for client-side data fetching
+
+4.
+
+- getStaticProps should return an object and object should contain a props key which is an object
+
+5.
+
+- getStaticProps will run at build time
+- During development, getStaticProps runs on every request
+
+## Dev vs. Prod
+
+- Prod Server: An optimized build is created once and you deploy that build. You don't make code changes on the go once it is deployed. For production builds a page will be pre-rendered once when we run the build command.
+- Dev Server: We should be able to make changes in our code and we want that code to immediately reflect in the browser. In development mode, the page is pre-rendered for every request you make.
