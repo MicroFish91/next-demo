@@ -64,6 +64,25 @@
 - getStaticProps will run at build time
 - During development, getStaticProps runs on every request
 
+Also see getStaticPaths() for SSG when using router id params
+
+## getStaticPaths()
+
+1. getStaticPaths fallback: false
+
+- The paths returned by getStaticPaths will be rendered to HTML at build time by getStaticProps
+- If fallback is set to false, then any paths not returned by getStaticPaths will result in a 404 error
+
+2. getStaticPaths fallback: true
+
+- The paths returned by getStaticPaths will be rendered to HTML at build time by getStaticProps
+- The paths that have not been generated at build time will not result in a 404 page. Instead, NextJS will serve a "fallback" version of the page on the first request to such a path.
+- In the background, NextJS will statically generate the requested path HTML and JSON. This includes running getStaticProps.
+- When that's done, the browser receives the JSON for the generated path. This will be used to automatically render the page with the required props. From the user's perspective, the page will be swapped from the fallback page to the full page.
+- At the same time, NextJS keeps track of the new list of pre-rendered pages. Subsequent requests to the same path will serve the generated page, just like other pages pre-rendered at build time
+
+Example done in "posts"
+
 ## Dev vs. Prod
 
 - Prod Server: An optimized build is created once and you deploy that build. You don't make code changes on the go once it is deployed. For production builds a page will be pre-rendered once when we run the build command.
